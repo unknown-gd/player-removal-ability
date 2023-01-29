@@ -1,2 +1,2 @@
-# gmod_player_remover
+# Player Remover
 Allows admins remove players using remover.
