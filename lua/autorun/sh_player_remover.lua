@@ -1,13 +1,14 @@
-local convar = CreateConVar( "sv_player_remove_action", "kill", FCVAR_ARCHIVE, " - Action on player remove: kill or kick." )
+if SERVER then
+    CreateConVar( "sv_player_remove_kick", "0", FCVAR_ARCHIVE, " - Kick players on remove." )
+end
 
-hook.Add("CanTool", "Player Remover", function( ply, tr, toolname )
-    if (toolname == "remover") and ply:IsAdmin() then
+hook.Add( "CanTool", "Player Remover", function( ply, tr, toolname )
+    if toolname == "remover" and ply:IsAdmin() then
         local ent = tr.Entity
         if IsValid( ent ) and ent:IsPlayer() then
-            if (SERVER) then
-                local mode = string.lower( convar:GetString() )
-                if (mode == "kick") then
-                    ent:Kick( "You have been removed!" )
+            if SERVER then
+                if cvars.Bool( "sv_player_remove_kick", false ) then
+                    ent:Kick( "You have been removed." )
                 else
                     ent:KillSilent()
                 end
@@ -26,4 +27,4 @@ hook.Add("CanTool", "Player Remover", function( ply, tr, toolname )
             return false
         end
     end
-end)
+end )
