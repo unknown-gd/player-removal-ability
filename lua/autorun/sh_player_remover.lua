@@ -1,5 +1,5 @@
 if SERVER then
-    CreateConVar( "sv_player_remove_kick", "0", FCVAR_ARCHIVE, " - Kick players on remove." )
+    CreateConVar( "sv_player_remove_kick", "0", FCVAR_ARCHIVE, "Kick players on remove." )
 end
 
 hook.Add( "CanTool", "Player Remover", function( ply, tr, toolname )
