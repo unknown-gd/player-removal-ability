@@ -9,7 +9,7 @@ hook.Add( "CanTool", "Player Remover", function( ply, traceResult, toolName )
     if not IsValid( entity ) or not entity:IsPlayer() then return end
 
     if SERVER then
-        if cvars.Bool( "sv_player_remove_kick", false ) then
+        if cvars.Bool( "mp_kick_player_on_remove" ) then
             entity:Kick( "You have been removed." )
         else
             entity:KillSilent()
