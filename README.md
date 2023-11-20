@@ -1,4 +1,5 @@
 # Player Remover
-Allows admins remove players using remover.
+Allow admin remove players using remover.
 
-`mp_kick_player_on_remove` - Kicks player on remove.
+### Client Side ConVar:
+- `cl_player_remover_kick` - Kicks player on remove.
