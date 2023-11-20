@@ -1,0 +1,23 @@
+CreateClientConVar( "cl_player_remover_kick", "0", true, true, "Kicks players on remove.", 0, 1 )
+
+hook.Add "CanTool", "Player Remover", ( traceResult, toolName ) =>
+    unless toolName == "remover" and @IsAdmin!
+        return
+
+    target = traceResult.Entity
+    unless target\IsValid! and target\IsPlayer! and target\Alive!
+        return
+
+    if target\GetNoDraw! or target\IsDormant!
+        return
+
+    effectData = EffectData!
+    effectData\SetOrigin( target\GetPos! )
+    effectData\SetEntity( target )
+    util.Effect( "entity_remove", effectData, true, true )
+
+    weapon = @GetActiveWeapon!
+    if weapon and weapon\IsValid! and weapon\GetClass! == "gmod_tool"
+        weapon\DoShootEffect( traceResult.HitPos, traceResult.HitNormal, target, traceResult.PhysicsBone, IsFirstTimePredicted! )
+
+    return false
