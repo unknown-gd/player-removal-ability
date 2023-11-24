@@ -33,7 +33,7 @@ hook.Add "CanTool", "Player Remover", ( _, toolName ) =>
     if target\GetNoDraw! or target\IsDormant!
         return
 
-    weapon\DoShootEffect( traceResult.HitPos, traceResult.HitNormal, target, traceResult.PhysicsBone, false )
+    weapon\DoShootEffect( traceResult.HitPos, traceResult.HitNormal, target, traceResult.PhysicsBone, IsFirstTimePredicted! )
 
     effectData = EffectData!
     effectData\SetOrigin( target\GetPos! )

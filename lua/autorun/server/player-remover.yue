@@ -35,7 +35,7 @@ hook.Add "CanTool", "Player Remover", ( _, toolName ) =>
     if target\GetNoDraw! or target\IsDormant!
         return
 
-    weapon\DoShootEffect( traceResult.HitPos, traceResult.HitNormal, target, traceResult.PhysicsBone, false )
+    weapon\DoShootEffect( traceResult.HitPos, traceResult.HitNormal, target, traceResult.PhysicsBone, IsFirstTimePredicted! )
 
     if @GetInfo( "cl_player_remover_kick" ) == "1"
         target\Kick( "You have been removed." )
