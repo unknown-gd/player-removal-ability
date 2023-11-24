@@ -1,4 +1,4 @@
-# Player Remover
+# Player Removal Ability
 Allow admin remove players using remover.
 
 ### Client Side ConVar:
