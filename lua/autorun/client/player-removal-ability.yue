@@ -1,8 +1,18 @@
 CreateClientConVar( "cl_player_remover_kick", "0", true, true, "Kicks players on remove.", 0, 1 )
-ToolMask = bit.bor( CONTENTS_SOLID, CONTENTS_MOVEABLE, CONTENTS_MONSTER, CONTENTS_WINDOW, CONTENTS_DEBRIS, CONTENTS_GRATE, CONTENTS_AUX )
-ToolDistance = 4096 * 8
+toolDistance = 4096 * 8
+:TraceLine = util
 
-hook.Add "CanTool", "Player Remover", ( _, toolName ) =>
+-- ULib support ( I really don't like this )
+if file.Exists( "ulib/shared/hook.lua", "LUA" )
+    include( "ulib/shared/hook.lua" )
+
+traceResult = {}
+trace = {
+    mask: bit.bor( CONTENTS_SOLID, CONTENTS_MOVEABLE, CONTENTS_MONSTER, CONTENTS_WINDOW, CONTENTS_DEBRIS, CONTENTS_GRATE, CONTENTS_AUX )
+    output: traceResult
+}
+
+hook.Add( "CanTool", "Player Remover", ( _, toolName ) =>
     unless toolName == "remover" and @IsAdmin!
         return
 
@@ -12,32 +22,30 @@ hook.Add "CanTool", "Player Remover", ( _, toolName ) =>
 
     @LagCompensation( true )
 
-	trace = {
-        start: @EyePos!
-        mask: ToolMask
-        filter: @
-    }
-
-	trace.endpos = trace.start + ( @GetAimVector! * ToolDistance )
-	traceResult = util.TraceLine( trace )
+    trace.start = @EyePos!
+	trace.endpos = trace.start + ( @GetAimVector! * toolDistance )
+    trace.filter = @
+	TraceLine( trace )
 
     @LagCompensation( false )
 
 	unless traceResult.Hit
         return
 
-    target = traceResult.Entity
-    unless target\IsValid! and target\IsPlayer! and target\Alive!
+    entity = traceResult.Entity
+    unless entity\IsValid! and entity\IsPlayer! and entity\Alive!
         return
 
-    if target\GetNoDraw! or target\IsDormant!
+    if entity\GetNoDraw! or entity\IsDormant!
         return
 
-    weapon\DoShootEffect( traceResult.HitPos, traceResult.HitNormal, target, traceResult.PhysicsBone, IsFirstTimePredicted! )
+    weapon\DoShootEffect( traceResult.HitPos, traceResult.HitNormal, entity, traceResult.PhysicsBone, IsFirstTimePredicted! )
 
     effectData = EffectData!
-    effectData\SetOrigin( target\GetPos! )
-    effectData\SetEntity( target )
+    effectData\SetOrigin( entity\GetPos! )
+    effectData\SetEntity( entity )
     util.Effect( "entity_remove", effectData, true, true )
 
     return false
+
+PRE_HOOK_RETURN or HOOK_MONITOR_HIGH )
