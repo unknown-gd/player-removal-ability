@@ -2,17 +2,13 @@ CreateClientConVar( "cl_player_remover_kick", "0", true, true, "Kicks players on
 toolDistance = 4096 * 8
 :TraceLine = util
 
--- ULib support ( I really don't like this )
-if file.Exists( "ulib/shared/hook.lua", "LUA" )
-    include( "ulib/shared/hook.lua" )
-
 traceResult = {}
 trace = {
     mask: bit.bor( CONTENTS_SOLID, CONTENTS_MOVEABLE, CONTENTS_MONSTER, CONTENTS_WINDOW, CONTENTS_DEBRIS, CONTENTS_GRATE, CONTENTS_AUX )
     output: traceResult
 }
 
-hook.Add( "CanTool", "Player Remover", ( _, toolName ) =>
+hook.Add "CanTool", "Player removal ability", ( _, toolName ) =>
     unless toolName == "remover" and @IsAdmin!
         return
 
@@ -47,5 +43,3 @@ hook.Add( "CanTool", "Player Remover", ( _, toolName ) =>
     util.Effect( "entity_remove", effectData, true, true )
 
     return false
-
-PRE_HOOK_RETURN or HOOK_MONITOR_HIGH )
